@@ -22,8 +22,8 @@
 #' @import dplyr
 #' @export
 CreateGRangeObj <- function (specific_feature,feature_id){
-  feature_sub <- specific_feature %>%
-    filter(V4 != "") # mitocondrial genes have no chromosome location
+  feature_sub <- specific_feature[startsWith(specific_feature$V4, "chr"),]
+  # mitocondrial genes have no chromosome location
 
   gr <- GRanges(
     seqnames = gsub("chr","",feature_sub$V4),
