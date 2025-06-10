@@ -16,6 +16,8 @@ Imports:
   GenomicRanges, 
   ggplot2, 
   rtracklayer  
+Suggest: knitr, rmarkdown
+VignetteBuilder: knitr
 Description: Functions for the integration, normalization, annotation, and visualization of multi-omics datasets.
     Includes tools for handling gene expression and ATAC-seq data, genomic range annotation,
     overlap statistics, and interactive plotting of omics features across chromosomes.
