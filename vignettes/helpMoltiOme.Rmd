@@ -29,24 +29,39 @@ First, we load the raw data from the located files.
 
 ```{r echo=FALSE}
 raw_mtx <- Matrix(
-c(150, 2000, 50, 5, 200, 2500, 65, 0), nrow = 4, sparse = TRUE,
-dimnames = list(NULL, NULL)
+  c(150, 2000, 50, 5, 200, 2500, 65, 0, 
+    300, 450, 120, 180, 90, 800, 10, 5, 40, 600),
+  nrow = 10, sparse = TRUE,
+  dimnames = list(NULL, NULL)
 )
+
 features <- data.table(
-V1 = c("GENE_1", "GENE_2", "PEAK_101", "PEAK_102"),
-V2 = c("TP53", "EGFR", "Peak101", "Peak102"),
-V3 = c("RNA", "RNA", "ATAC", "ATAC"),
-V4 = c("chr17", "chr7", "chr17", "chr7"),
-V5 = c(7661779, 55019017, 7660000, 55018000),
-V6 = c(7687550, 55211628, 7660500, 55018500)
+    V1 = c("GENE_1", "GENE_2", "PEAK_101", "PEAK_102", 
+           "GENE_3", "GENE_4", "GENE_5", "PEAK_103", "PEAK_104", "PEAK_105"), 
+    V2 = c("TP53", "EGFR", "Peak101", "Peak102",     
+           "BRCA1", "MYC", "AKT1", "Peak103", "Peak104", "Peak105"),
+    V3 = c("RNA", "RNA", "ATAC", "ATAC",              
+           "RNA", "RNA", "RNA", "ATAC", "ATAC", "ATAC"), 
+    V4 = c("chr7", "chr7", "chr7", "chr14",           
+           "chr7", "chr14", "chr14", "chr7", "chr14", "chr14"), 
+    V5 = c(7661779, 55019017, 7660000, 55018000,       
+           43044295, 127735434, 104769349, 43044000, 127735000, 104769000),
+    V6 = c(7687550, 55211628, 7660500, 55018500,     
+           43125482, 127742951, 104803113, 43044500, 127735500, 104769500) 
 )
+
+# Barcodes remain the same as we are not adding new samples.
 barcodes <- data.table(V1 = c("SampleA", "SampleB"))
+
+# The GTF object is expanded to include annotations for the new genes.
 gtf <- GRanges(
-seqnames = c("17", "7"),
-ranges = IRanges(start = c(7660200, 55019000), end = c(7688000, 55212000)),
-type = "gene",
-gene_id = c("GENE_1", "GENE_2"),
-gene_biotype = c("protein_coding", "protein_coding")
+  seqnames = c("14", "7", "7", "7", "14"),
+  ranges = IRanges(start = c(7660200, 55019000, 43044295, 127735434, 104769349), 
+                   end = c(7688000, 55212000, 43125482, 127742951, 104803113)),
+  type = "gene",
+  gene_id = c("GENE_1", "GENE_2", "GENE_3", "GENE_4", "GENE_5"),
+  gene_biotype = c("protein_coding", "protein_coding", "protein_coding", 
+                   "protein_coding", "protein_coding")
 )
 ```
 
