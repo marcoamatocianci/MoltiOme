@@ -14,6 +14,9 @@ suppressMessages(library(MoltiOme))
 suppressMessages(library(Matrix))
 suppressMessages(library(GenomicRanges))
 suppressMessages(library(data.table))
+suppressMessages(library(dplyr)) 
+suppressMessages(library(tidyr)) 
+suppressMessages(library(ggplot2)) 
 ```
 
 # Introduction
@@ -141,6 +144,9 @@ Normalize count data to log2 CPM (Counts Per Million) using `NormalizeCPM()`.
 normalized_rna_data <- NormalizeCPM(rna_data)
 cat("Normalized RNA Data (log2CPM):\n")
 knitr::kable(head(normalized_rna_data))
+normalized_atac_data <- NormalizeCPM(atac_data)
+cat("Normalized ATAC Data (log2CPM):\n")
+knitr::kable(head(normalized_atac_data))
 ```
 ---
 
@@ -205,8 +211,11 @@ expression_plots <- PlotGeneExpression(gr_expression)
 print(expression_plots[])
 ```
 ---
+```{r}
 
-# Session Info
+ 
+```
+# Session Info0
 
 ```{r echo=FALSE}
 sessionInfo()
