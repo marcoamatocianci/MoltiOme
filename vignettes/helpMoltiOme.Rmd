@@ -9,6 +9,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r echo = FALSE, warning=FALSE}
+suppressMessages(library(MoltiOme))
+suppressMessages(library(Matrix))
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(data.table))
+```
+
 # Introduction
 
 **MoltiOme** is an R package for the integration, normalization, annotation, and visualization of multi-omics datasets, with a focus on gene expression and ATAC-seq data. This vignette demonstrates the main functions and workflows provided by the package.
@@ -17,30 +24,93 @@ vignette: >
 
 # Data Extraction and Preparation
 
+## Loading Cell Ranger outputs
+First, we load the raw data from the located files.
+
+```{r echo=FALSE}
+raw_mtx <- Matrix(
+c(150, 2000, 50, 5, 200, 2500, 65, 0), nrow = 4, sparse = TRUE,
+dimnames = list(NULL, NULL)
+)
+features <- data.table(
+V1 = c("GENE_1", "GENE_2", "PEAK_101", "PEAK_102"),
+V2 = c("TP53", "EGFR", "Peak101", "Peak102"),
+V3 = c("RNA", "RNA", "ATAC", "ATAC"),
+V4 = c("chr17", "chr7", "chr17", "chr7"),
+V5 = c(7661779, 55019017, 7660000, 55018000),
+V6 = c(7687550, 55211628, 7660500, 55018500)
+)
+barcodes <- data.table(V1 = c("SampleA", "SampleB"))
+gtf <- GRanges(
+seqnames = c("17", "7"),
+ranges = IRanges(start = c(7660200, 55019000), end = c(7688000, 55212000)),
+type = "gene",
+gene_id = c("GENE_1", "GENE_2"),
+gene_biotype = c("protein_coding", "protein_coding")
+)
+```
+
+Use `CollapseSparseCell` to assign feature and barcode names to your matrix.
+
+```{r}
+named_mtx <- CollapseSparseCell(raw_mtx, features, barcodes)
+```
+
+
+Finally, we use `SparsetoDataTable` to convert the sparse matrix into a dense `data.table` object, which is the input for the rest of the pipeline.
+
+```{r}
+dt <- SparsetoDataTable(named_mtx)
+knitr::kable(head(dt))
+```
+
 ## Extracting Specific Omics Data
 
 Use `ExtractOmicsData()` to subset a data table for features of a given type.
 
+```{r}
+rna_data <- ExtractOmicsData(dt, features, "RNA")
+atac_data <- ExtractOmicsData(dt, features, "ATAC")
+```
 
+## Add Row Sum and Mean to feature
+```{r}
+rna_features <- AddRowSumToFeature(rna_data,features)
+atac_features <- AddRowSumToFeature(atac_data,features)
+rna_features <- AddRowMeansToFeature(rna_data,rna_features)
+atac_features <- AddRowMeansToFeature(atac_data,atac_features)
+```
 
 ## Creating Genomic Ranges Objects
 
 The `CreateGRangeObj()` function constructs a `GRanges` object from a features table and adds relevant metadata.
 
+```{r}
+gr_expression <- CreateGRangeObj(rna_features, "Gene_Expression")
+gr_atac <- CreateGRangeObj(atac_features, "Peaks")
+```
 
 ---
 
 # Annotation and Overlap
 
-## Mapping Protein-Coding Gene Overlaps
-
-Use `MapProteinCodingOverlaps()` to annotate features with overlapping protein-coding genes from a GTF file.
-
 
 ## Finding Protein-Coding Genes
 
 Extract all protein-coding gene IDs from a GTF annotation with `findProteinCoding()`.
+```{r}
+protein_coding_ids <- findProteinCoding(gtf)
+print(protein_coding_ids)
+```
 
+## Mapping Protein-Coding Gene Overlaps
+
+Use `MapProteinCodingOverlaps()` to annotate features with overlapping protein-coding genes from a GTF file.
+```{r}
+gr_atac_annotated <- MapProteinCodingOverlaps(gtf, gr_atac)
+cat("Annotated ATAC GRanges:\n")
+print(gr_atac_annotated)
+```
 
 ---
 
@@ -48,9 +118,15 @@ Extract all protein-coding gene IDs from a GTF annotation with `findProteinCodin
 
 ## CPM Normalization
 
+#### To perform eliminating sum and mean
+
 Normalize count data to log2 CPM (Counts Per Million) using `NormalizeCPM()`.
 
-
+```{r}
+normalized_rna_data <- NormalizeCPM(rna_data)
+cat("Normalized RNA Data (log2CPM):\n")
+knitr::kable(head(normalized_rna_data))
+```
 ---
 
 # Data Integration
@@ -58,7 +134,17 @@ Normalize count data to log2 CPM (Counts Per Million) using `NormalizeCPM()`.
 ## Extracting Common Genes and Peaks
 
 Combine expression and ATAC data for genes with both data types using `CommonGenesData()`.
+```{r}
+common_data <- CommonGenesData(
+expression_data = rna_data,
+atac_data = atac_data,
+gr_expression = gr_expression,
+gr_atac = gr_atac_annotated
+)
 
+cat("Combined Data for Common Features:\n")
+knitr::kable(common_data)
+```
 
 ---
 
@@ -67,40 +153,49 @@ Combine expression and ATAC data for genes with both data types using `CommonGen
 ## Peak Statistics
 
 Summarize the overlap between ATAC peaks and gene expression using `PeakStats()`.
+```{r}
+  
+peak_statistics <- PeakStats(expression = gr_expression, atac = gr_atac_annotated)
+knitr::kable(peak_statistics)
+```
 
 
 ## Gene Statistics
 
 Summarize the overlap between genes and ATAC peaks using `GeneStats()`.
-
-
----
-
-# Feature Table Augmentation
-
-## Adding Row Sums to Features
-
-Add a row sum column to the features table with `AddRowSumToFeature()`.
-
+```{r}
+gene_statistics <- GeneStats(expression = gr_expression, atac = gr_atac_annotated)
+knitr::kable(gene_statistics)
+```
 
 ---
+
 
 # Visualization
 
 ## ATAC-seq Peak Intensity Distribution
 
-Plot the distribution of ATAC-seq peak intensities across chromosomes with `PlotATACDistribution()`.
+Plot the distribution of ATAC-seq peak intensities across chromosomes with `PlotATACDistribution()`. The intensity is taken from the `sum` column we added earlier.
 
+```{r}
+atac_plots <- PlotATACDistribution(gr_atac_annotated)
+print(atac_plots[])
+```
 
 ## Gene Expression Intensity Distribution
 
 Visualize gene expression intensity across chromosomes with `PlotGeneExpression()`.
-
-
+```{r}
+expression_plots <- PlotGeneExpression(gr_expression)
+print(expression_plots[])
+```
 ---
 
 # Session Info
 
+```{r echo=FALSE}
+sessionInfo()
+```
 
 ---
 

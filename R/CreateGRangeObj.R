@@ -10,18 +10,18 @@
 #'   - `V2`: Gene symbol
 #'   - `V1`: Feature ID
 #'   - Optional `sum`: Aggregate value column
-#' @param data_type Character string specifying data type (used for metadata column names)
+#' @param feature_id Character string specifying feature_id (used for metadata column names)
 #'
 #' @return A `GRanges` object with genomic ranges and metadata columns containing:
-#'   - `<data_type>_Symbol`: Gene symbols from `V2`
-#'   - `<data_type>_id`: Feature IDs from `V1`
-#'   - (Optional) `<data_type>_sum`: Values from `sum` column if present
+#'   - `<feature_id>_Symbol`: Gene symbols from `V2`
+#'   - `<feature_id>_id`: Feature IDs from `V1`
+#'   - (Optional) `<feature_id>_sum`: Values from `sum` column if present
 #'
 #' @import GenomicRanges
 #' @import IRanges
 #' @import dplyr
 #' @export
-CreateGRangeObj <- function (specific_feature,data_type){
+CreateGRangeObj <- function (specific_feature,feature_id){
   feature_sub <- specific_feature %>%
     filter(V4 != "") # mitocondrial genes have no chromosome location
 
@@ -33,9 +33,11 @@ CreateGRangeObj <- function (specific_feature,data_type){
     ),
   )
   #adding the gene symbol
-  mcols(gr)[[gsub(" ","_",paste0(data_type, "_Symbol"))]]<- feature_sub$V2
-  mcols(gr)[[gsub(" ","_",paste0(data_type, "_id"))]] <- feature_sub$V1
+  mcols(gr)[[gsub(" ","_",paste0(feature_id, "_Symbol"))]]<- feature_sub$V2
+  mcols(gr)[[gsub(" ","_",paste0(feature_id, "_id"))]] <- feature_sub$V1
   if(!is.null(feature_sub$sum)){
-    mcols(gr)[[gsub(" ","_",paste0(data_type, "_sum"))]] <- feature_sub$sum }
+    mcols(gr)[[gsub(" ","_",paste0(feature_id, "_sum"))]] <- feature_sub$sum }
+  if(!is.null(feature_sub$mean)){
+    mcols(gr)[[gsub(" ","_",paste0(feature_id, "_mean"))]] <- feature_sub$mean }
   return(gr)
 }

@@ -17,9 +17,10 @@
 PeakStats <- function(expression,atac){
   common_genes <- intersect(expression$Gene_Expression_id, atac$gene_id)
   PeakNotMerged <- atac[!atac$gene_id %in% common_genes]$Peaks_id
+  final_peaks <- atac[atac$gene_id %in% common_genes]$Peaks_id
   total_peaks <- atac$gene_id
   final_genes <- common_genes
-  peak_stats <- data.frame(row.names = "peak_stats",tot_peaks=length(total_peaks),merged_num=length(final_peaks),non_merged=length(PeakNotMerged),prc_tot=length(final_peaks)/length(total_peaks)*100,prc_unmerged=length(PeakNotMerged)/length(total_peaks)*100)
+  peak_stats <- data.frame(row.names = "peak_stats",tot_peaks=length(total_peaks),merged_num=length(final_peaks),non_merged=length(PeakNotMerged),prc_merged=length(final_peaks)/length(total_peaks)*100,prc_unmerged=length(PeakNotMerged)/length(total_peaks)*100)
 
   return(peak_stats)
 

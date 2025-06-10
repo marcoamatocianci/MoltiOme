@@ -4,7 +4,7 @@
 \alias{CreateGRangeObj}
 \title{Create Genomic Ranges Object from Feature Data}
 \usage{
-CreateGRangeObj(specific_feature, data_type)
+CreateGRangeObj(specific_feature, feature_id)
 }
 \arguments{
 \item{specific_feature}{A data.frame containing genomic features. Must contain columns:
@@ -15,13 +15,13 @@ CreateGRangeObj(specific_feature, data_type)
 - `V1`: Feature ID
 - Optional `sum`: Aggregate value column}
 
-\item{data_type}{Character string specifying data type (used for metadata column names)}
+\item{feature_id}{Character string specifying feature_id (used for metadata column names)}
 }
 \value{
 A `GRanges` object with genomic ranges and metadata columns containing:
-  - `<data_type>_Symbol`: Gene symbols from `V2`
-  - `<data_type>_id`: Feature IDs from `V1`
-  - (Optional) `<data_type>_sum`: Values from `sum` column if present
+  - `<feature_id>_Symbol`: Gene symbols from `V2`
+  - `<feature_id>_id`: Feature IDs from `V1`
+  - (Optional) `<feature_id>_sum`: Values from `sum` column if present
 }
 \description{
 Constructs a `GRanges` object from genomic feature data while adding metadata columns.

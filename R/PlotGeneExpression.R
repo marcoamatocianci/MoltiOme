@@ -14,8 +14,8 @@
 PlotGeneExpression <- function(gr_expression){
 
   plot_list <- list()
-  for (chr in gr_expression_coding@seqnames@values){
-    grsub <- gr_expression_coding[gr_expression_coding@seqnames==chr]
+  for (chr in gr_expression@seqnames@values){
+    grsub <- gr_expression[gr_expression@seqnames==chr]
     df <- data.frame(start=grsub@ranges@start, end=(grsub@ranges@width+grsub@ranges@start-1) ,size=grsub@ranges@width, intensity=mcols(grsub)$Gene_Expression_sum)
 
     p <- ggplot(df, aes(x = start, y = intensity, color = intensity)) +
@@ -31,5 +31,5 @@ PlotGeneExpression <- function(gr_expression){
 
     plot_list[[chr]] <- p
   }
-
+  return(plot_list)
 }

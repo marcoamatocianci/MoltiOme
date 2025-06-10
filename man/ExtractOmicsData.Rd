@@ -9,7 +9,7 @@ ExtractOmicsData(data_table, features, feature_id)
 \arguments{
 \item{data_table}{A data.frame or data.table containing omics data. Must have a column named `row.names` with feature IDs.}
 
-\item{features}{A data.frame with at least column `V3`.}
+\item{features}{A data.frame with at least column `V3` containing the feature_id.}
 
 \item{feature_id}{A character string specifying the type of feature to extract (matching `V3` in `features`).}
 }

@@ -11,11 +11,12 @@ Authors@R: c(
   )
 Imports: 
   dplyr, 
-  Matrix, 
   data.table, 
+  Matrix,
   GenomicRanges, 
   ggplot2, 
-  rtracklayer  
+  scales,
+  IRanges
 Suggest: knitr, rmarkdown
 VignetteBuilder: knitr
 Description: Functions for the integration, normalization, annotation, and visualization of multi-omics datasets.
