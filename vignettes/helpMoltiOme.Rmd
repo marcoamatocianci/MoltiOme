@@ -1,0 +1,111 @@
+---
+title: "MoltiOme: Multi-Omics Data Integration and Visualization"
+author: "Marco Cianci"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MoltiOme: Multi-Omics Data Integration and Visualization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+**MoltiOme** is an R package for the integration, normalization, annotation, and visualization of multi-omics datasets, with a focus on gene expression and ATAC-seq data. This vignette demonstrates the main functions and workflows provided by the package.
+
+---
+
+# Data Extraction and Preparation
+
+## Extracting Specific Omics Data
+
+Use `ExtractOmicsData()` to subset a data table for features of a given type.
+
+
+
+## Creating Genomic Ranges Objects
+
+The `CreateGRangeObj()` function constructs a `GRanges` object from a features table and adds relevant metadata.
+
+
+---
+
+# Annotation and Overlap
+
+## Mapping Protein-Coding Gene Overlaps
+
+Use `MapProteinCodingOverlaps()` to annotate features with overlapping protein-coding genes from a GTF file.
+
+
+## Finding Protein-Coding Genes
+
+Extract all protein-coding gene IDs from a GTF annotation with `findProteinCoding()`.
+
+
+---
+
+# Data Normalization
+
+## CPM Normalization
+
+Normalize count data to log2 CPM (Counts Per Million) using `NormalizeCPM()`.
+
+
+---
+
+# Data Integration
+
+## Extracting Common Genes and Peaks
+
+Combine expression and ATAC data for genes with both data types using `CommonGenesData()`.
+
+
+---
+
+# Statistics
+
+## Peak Statistics
+
+Summarize the overlap between ATAC peaks and gene expression using `PeakStats()`.
+
+
+## Gene Statistics
+
+Summarize the overlap between genes and ATAC peaks using `GeneStats()`.
+
+
+---
+
+# Feature Table Augmentation
+
+## Adding Row Sums to Features
+
+Add a row sum column to the features table with `AddRowSumToFeature()`.
+
+
+---
+
+# Visualization
+
+## ATAC-seq Peak Intensity Distribution
+
+Plot the distribution of ATAC-seq peak intensities across chromosomes with `PlotATACDistribution()`.
+
+
+## Gene Expression Intensity Distribution
+
+Visualize gene expression intensity across chromosomes with `PlotGeneExpression()`.
+
+
+---
+
+# Session Info
+
+
+---
+
+# References
+
+- [GenomicRanges package](https://bioconductor.org/packages/GenomicRanges/)
+- [data.table package](https://cran.r-project.org/package=data.table)
+- [ggplot2 package](https://ggplot2.tidyverse.org/)
