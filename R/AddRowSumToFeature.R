@@ -10,6 +10,9 @@
 #' @import data.table
 #' @export
 AddRowSumToFeature <- function (data_table,features){
+  if (!is.null(features$sum)) {
+    features$sum <- NULL
+  }
   matrix_sum <- data_table[, sum := rowSums(.SD), .SDcols = is.numeric]
   features_sum <- features[matrix_sum[, .(row.names, sum)], on = .(V1=row.names)]
   return(features_sum)

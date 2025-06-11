@@ -16,6 +16,6 @@
 #' @export
 SparsetoDataTable <- function(mtx){
   full_mat <- as.matrix(mtx)
-  data_table <- as.data.table(as.data.frame(full_mat),keep.rownames = "row.names")
+  data_table <- as.data.table(full_mat,keep.rownames = "row.names")
   return(data_table)
 }

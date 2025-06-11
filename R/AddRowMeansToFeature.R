@@ -10,6 +10,9 @@
 #' @import data.table
 #' @export
 AddRowMeansToFeature <- function (data_table,features){
+  if (!is.null(features$mean)) {
+    features$mean <- NULL
+  }
   matrix_mean<- data_table[, mean := rowMeans(.SD), .SDcols = is.numeric]
   features_mean <- features[matrix_mean[, .(row.names, mean)], on = .(V1=row.names)]
   return(features_mean)
