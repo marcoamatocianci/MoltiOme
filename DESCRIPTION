@@ -1,0 +1,32 @@
+Package: MoltiOme
+Type: Package
+Title: Multi-Omics Data Integration and Visualization Toolkit
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Marco", "Cianci",
+      email = "marco.cianci@edu.unito.it",
+      role = c("aut", "cre")
+    )
+  )
+Imports: 
+  dplyr, 
+  tidyr,
+  data.table, 
+  Matrix,
+  GenomicRanges, 
+  ggplot2, 
+  scales,
+  IRanges
+Suggest: knitr, rmarkdown
+VignetteBuilder: knitr
+Description: Functions for the integration, normalization, annotation, and visualization of multi-omics datasets.
+    Includes tools for handling gene expression and ATAC-seq data, genomic range annotation,
+    overlap statistics, and interactive plotting of omics features across chromosomes.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Suggests: 
+    knitr,
+    rmarkdown
