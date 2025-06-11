@@ -216,11 +216,6 @@ print(expression_plots[])
 LogCPMCombinedPlot(atac_data = atac_data, expression_data = rna_data, atac_features = atac_features, expression_features = rna_features ,gr_atac = gr_atac_annotated)
  
 ```
-# Session Info0
-
-```{r echo=FALSE}
-sessionInfo()
-```
 
 ---
 
