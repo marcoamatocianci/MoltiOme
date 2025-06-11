@@ -116,7 +116,7 @@ For a more detailed, step-by-step guide on how to use the package, please see th
 
 ```r
 # This will open the detailed tutorial in your browser
-vignette("MoltiOme-workflow", package = "MoltiOme")
+vignette("helpMoltiOme", package = "MoltiOme")
 ```
 
 ## Function Overview
@@ -134,7 +134,6 @@ vignette("MoltiOme-workflow", package = "MoltiOme")
 | `findProteinCoding`      | Extracts the IDs of all protein-coding genes from a GTF annotation object.           |
 | `CommonGenesData`        | Combines expression and ATAC data for genes present in both datasets.                |
 | `PeakStats` / `GeneStats`| Calculate statistics on how many features were successfully integrated.                |
-| `FinalPlot`              | Generates a scatter plot to directly compare normalized RNA and ATAC values.         |
 | `LogCPMCombinedPlot`     | Creates scatter plots of mean ATAC vs. RNA values, separated by chromosome.          |
 | `PlotATACDistribution`   | Plots the intensity of ATAC peaks across genomic positions for each chromosome.      |
 | `PlotGeneExpression`     | Plots the intensity of gene expression across genomic positions for each chromosome. |
