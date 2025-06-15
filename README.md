@@ -109,7 +109,38 @@ Finally, combine the data and create a summary plot.
 # )
 # print(final_plot)
 ```
+
+
+## Detailed Tutorial
+
+For a more detailed, step-by-step guide on how to use the package, please see the package vignette.
+
+```r
+# This will open the detailed tutorial in your browser
+vignette("helpMoltiOme", package = "MoltiOme")
+```
+
+## Function Overview
+
+| Function                 | Description                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------ |
+| `CollapseSparseCell`     | Assigns feature and barcode names to a raw sparse matrix.                            |
+| `SparsetoDataTable`      | Converts a named sparse matrix into a dense `data.table`.                            |
+| `ExtractOmicsData`       | Subsets the main data table to get data for a specific omics type (e.g., "RNA").      |
+| `NormalizeCPM`           | Performs log2(CPM+1) normalization on a count table.                                 |
+| `AddRowSumToFeature`     | Calculates row sums (total counts) and adds them to the features table.              |
+| `AddRowMeansToFeature`   | Calculates row means (average counts) and adds them to the features table.           |
+| `CreateGRangeObj`        | Creates a `GRanges` object from a features table for genomic analysis.               |
+| `MapProteinCodingOverlaps`| Annotates a `GRanges` object (e.g., ATAC peaks) with overlapping gene IDs.           |
+| `findProteinCoding`      | Extracts the IDs of all protein-coding genes from a GTF annotation object.           |
+| `CommonGenesData`        | Combines expression and ATAC data for genes present in both datasets.                |
+| `PeakStats` / `GeneStats`| Calculate statistics on how many features were successfully integrated.                |
+| `LogCPMCombinedPlot`     | Creates scatter plots of mean ATAC vs. RNA values, separated by chromosome.          |
+| `PlotATACDistribution`   | Plots the intensity of ATAC peaks across genomic positions for each chromosome.      |
+| `PlotGeneExpression`     | Plots the intensity of gene expression across genomic positions for each chromosome. |
+
 ## Docker Analysis Workflow
+![logo](https://github.com/user-attachments/assets/0486bbf7-8da6-419c-8e60-b53bdf3735e5)
 
 To run the `MoltiOme` analysis pipeline within a reproducible Docker environment, you can use the pre-built image available on Docker Hub. This method ensures that all dependencies are correctly managed and allows you to run the analysis on any system with Docker installed, which is ideal for complex genomic analysis workflows[1][2][3].
 
@@ -140,44 +171,7 @@ Navigate to your main project directory (`my_project`) in your terminal and exec
 docker run --rm \
   -v "$(pwd)/data":/data \
   -v "$(pwd)/outputs":/results \
-  mcianci/examproject
+  mcianci/examproject:cianci
 ```
-
-### Command Explanation
-
-*   `docker run --rm`: This command runs the container and includes the `--rm` flag to automatically remove it once the process is complete, keeping your system clean.
-*   `-v "$(pwd)/data":/data`: This is a **bind mount** that shares data from the host to the container[8][9]. It maps your local `data` directory (referenced by the absolute path `$(pwd)/data`) to the `/data` directory inside the container. This allows the R script inside the container to read your input files[8].
-*   `-v "$(pwd)/outputs":/results`: This second bind mount maps your local `outputs` directory to the `/results` directory inside the container. Any files saved to `/results` by the script will appear in your local `outputs` folder, making the results accessible on your host machine after the container finishes[8][9].
-*   `mcianci/examproject`: This is the name of the Docker image that contains the `MoltiOme` package, all its R dependencies, and the script to execute the analysis pipeline.
 
 After the container finishes running, your `outputs` directory will contain the generated plots and data files from the analysis.
-
-## Detailed Tutorial
-
-For a more detailed, step-by-step guide on how to use the package, please see the package vignette.
-
-```r
-# This will open the detailed tutorial in your browser
-vignette("helpMoltiOme", package = "MoltiOme")
-```
-
-## Function Overview
-
-| Function                 | Description                                                                          |
-| ------------------------ | ------------------------------------------------------------------------------------ |
-| `CollapseSparseCell`     | Assigns feature and barcode names to a raw sparse matrix.                            |
-| `SparsetoDataTable`      | Converts a named sparse matrix into a dense `data.table`.                            |
-| `ExtractOmicsData`       | Subsets the main data table to get data for a specific omics type (e.g., "RNA").      |
-| `NormalizeCPM`           | Performs log2(CPM+1) normalization on a count table.                                 |
-| `AddRowSumToFeature`     | Calculates row sums (total counts) and adds them to the features table.              |
-| `AddRowMeansToFeature`   | Calculates row means (average counts) and adds them to the features table.           |
-| `CreateGRangeObj`        | Creates a `GRanges` object from a features table for genomic analysis.               |
-| `MapProteinCodingOverlaps`| Annotates a `GRanges` object (e.g., ATAC peaks) with overlapping gene IDs.           |
-| `findProteinCoding`      | Extracts the IDs of all protein-coding genes from a GTF annotation object.           |
-| `CommonGenesData`        | Combines expression and ATAC data for genes present in both datasets.                |
-| `PeakStats` / `GeneStats`| Calculate statistics on how many features were successfully integrated.                |
-| `LogCPMCombinedPlot`     | Creates scatter plots of mean ATAC vs. RNA values, separated by chromosome.          |
-| `PlotATACDistribution`   | Plots the intensity of ATAC peaks across genomic positions for each chromosome.      |
-| `PlotGeneExpression`     | Plots the intensity of gene expression across genomic positions for each chromosome. |
-
-
