@@ -101,13 +101,13 @@ Finally, combine the data and create a summary plot.
 # normalized_atac_data <- ... (from previous step)
 
 # Generate a final plot comparing the two omics types
-# final_plot <- FinalPlot(
-#   gr_atac_annotated = gr_atac_annotated,
-#   normalized_rna_data = normalized_rna,
-#   normalized_atac_data = normalized_atac_data,
-#   color = atac.Sample # Color points by sample name
-# )
-# print(final_plot)
+ final_plot <- FinalPlot(
+   gr_atac_annotated = gr_atac_annotated,
+   normalized_rna_data = normalized_rna,
+   normalized_atac_data = normalized_atac_data,
+   color = atac.Sample # Color points by sample name
+ )
+ print(final_plot)
 ```
 
 
