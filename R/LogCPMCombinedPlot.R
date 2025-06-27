@@ -31,7 +31,7 @@ LogCPMCombinedPlot <- function(atac_data, expression_data, atac_features, expres
   p <- list()
   for (chr in gr_atac@seqnames@values) {
     data <- left_join(as.data.frame(gr_atac[gr_atac@seqnames==chr])[!is.na(gr_atac$gene_id),],expression_features, by=join_by("gene_id"=="V1")) %>%
-      left_join(atac_features,by = join_by("Peaks_id"=="V1"), suffix = c(".atac",".rna"))
+      left_join(atac_features,by = join_by("Peaks_id"=="V1"), suffix = c(".rna",".atac"))
 
     p[[chr]] <- ggplot(data)+
       geom_point(aes(x=mean.rna, y=mean.atac ))+
